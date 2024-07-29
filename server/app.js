@@ -1,4 +1,5 @@
  import express from "express";
+ import cors from "cors"
  import cookieParser from "cookie-parser"
 import AuthRoute from "./routes/auth.route.js"
 
@@ -8,6 +9,7 @@ import AuthRoute from "./routes/auth.route.js"
 
  app.use(express.json());
  app.use(cookieParser());
+ app.use(cors({origin:process.env.CLIENT_URL , credentials :  true}))
 
  app.listen(8800 , () => {
     console.log(`server is running `);
