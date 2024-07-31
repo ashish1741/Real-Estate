@@ -77,6 +77,8 @@ export const login = async (req, res) => {
       { expiresIn: age }
     );
 
+    const { ...userInfo} =  user
+
     //generate COOKIE Tokn and send to the user
     res
       .cookie("token", token, {
@@ -85,7 +87,7 @@ export const login = async (req, res) => {
       })
       .status(200)
       .json({
-        message: "Login Successfully",
+        userInfo
       });
   } catch (error) {
     return res.status(500).json({

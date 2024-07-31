@@ -1,28 +1,30 @@
 import { useState } from "react";
 import "./login.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { json, Link, useNavigate } from "react-router-dom";
+import apiRequest from "../../lib/apiRequest";
+
 
 function Login() {
   const [error, setError] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const navigate =   useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setisLoading(true);
-
+    setError("");
     const formData = new FormData(e.target);
-
     const username = formData.get("username");
     const password = formData.get("password");
-
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/login", {
+      const res = await apiRequest.post("/auth/login", {
         username,
         password,
       });
 
-      navigate("/login");
+      localStorage.setItem("user", JSON.stringify(res.data) )
+      navigate("/")
+
     } catch (error) {
       setError(error.response.data.message);
     }finally{
@@ -30,16 +32,20 @@ function Login() {
     }
   };
 
+  
+
   return (
     <div className="login">
       <div className="formContainer">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <h1>Welcome back</h1>
           <input name="username" type="text" placeholder="Username" />
           <input name="password" type="password" placeholder="Password" />
           <button disabled={isLoading}>Login</button>
           {error && <span>{error}</span>}
-          <Link to="/register">{"Don't"} you have an account?</Link>
+          <Link to="/register"> 
+          Don't you have an account?
+          </Link>
         </form>
       </div>
       <div className="imgContainer">
