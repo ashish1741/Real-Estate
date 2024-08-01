@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
-  const user = true;
+  const {username , avatar} =  currentUser.userInfo;
+  console.log(username);
+  
+
+
+
   return (
     <nav>
       <div className="left">
         <a href="/" className="logo">
-          <img src="/logo.png" alt="" />
+          <img src="/logo.png" alt="Logo" />
           <span>LamaEstate</span>
         </a>
         <a href="/">Home</a>
@@ -19,13 +26,16 @@ function Navbar() {
         <a href="/">Agents</a>
       </div>
       <div className="right">
-        {user ? (
+        {currentUser ? (
           <div className="user">
             <img
-              src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              alt=""
+              src={
+                avatar ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThfniC93R4LVY3q47jnybdM21z-XuIsx2rMQ&s"
+              }
+              alt="User Avatar"
             />
-            <span>John Doe</span>
+            <span>{username}</span>
             <Link to="/profile" className="profile">
               <div className="notification">3</div>
               <span>Profile</span>
@@ -42,7 +52,7 @@ function Navbar() {
         <div className="menuIcon">
           <img
             src="/menu.png"
-            alt=""
+            alt="Menu Icon"
             onClick={() => setOpen((prev) => !prev)}
           />
         </div>

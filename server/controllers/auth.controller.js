@@ -72,10 +72,13 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
+        isAdmin :  false,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: age }
     );
+
+    const { ...userInfo} =  user
 
     //generate COOKIE Tokn and send to the user
     res
@@ -85,7 +88,7 @@ export const login = async (req, res) => {
       })
       .status(200)
       .json({
-        message: "Login Successfully",
+        userInfo
       });
   } catch (error) {
     return res.status(500).json({
