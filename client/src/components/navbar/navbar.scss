@@ -8,6 +8,7 @@ nav {
 
   a {
     transition: all 0.4s ease;
+    cursor: pointer;
 
     @include sm {
       display: none;
@@ -46,6 +47,7 @@ nav {
       }
     }
   }
+
   .right {
     flex: 2;
     display: flex;
@@ -61,14 +63,15 @@ nav {
     a {
       padding: 12px 24px;
       margin: 20px;
+      cursor: pointer;
     }
 
-    .user{
+    .user {
       display: flex;
       align-items: center;
       font-weight: bold;
 
-      img{
+      img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -76,20 +79,22 @@ nav {
         margin-right: 20px;
       }
 
-      span{
-        @include sm{
+      span {
+        @include sm {
           display: none;
         }
       }
 
-      .profile{
+      .profile {
         padding: 12px 24px;
         background-color: #fece51;
         cursor: pointer;
         border: none;
         position: relative;
-        
-        .notification{
+        display: flex;
+        align-items: center;
+
+        .notification {
           position: absolute;
           top: -8px;
           right: -8px;
@@ -102,12 +107,12 @@ nav {
           align-items: center;
           justify-content: center;
         }
-
       }
     }
 
     .register {
       background-color: #fece51;
+      cursor: pointer;
     }
 
     .menuIcon {
