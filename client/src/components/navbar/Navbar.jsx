@@ -7,12 +7,16 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
+  const userInfo = currentUser?.userInfo;
+  const avatarUrl = userInfo?.avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThfniC93R4LVY3q47jnybdM21z-XuIsx2rMQ&s";
+  const username = userInfo?.username || "Guest";
+
   return (
     <nav>
       <div className="left">
         <Link to="/" className="logo">
           <img src="/logo.png" alt="Logo" />
-          <span>LamaEstate</span>
+          <span>Real Estate</span>
         </Link>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
@@ -22,14 +26,8 @@ function Navbar() {
       <div className="right">
         {currentUser ? (
           <div className="user">
-            <img
-              src={
-                currentUser.userInfo.avatar ||
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThfniC93R4LVY3q47jnybdM21z-XuIsx2rMQ&s"
-              }
-              alt="User Avatar"
-            />
-            <span>{currentUser.userInfo.username}</span>
+            <img src={avatarUrl} alt="User Avatar" />
+            <span>{username}</span>
             <Link to="/profile" className="profile">
               <div className="notification">3</div>
               <span>Profile</span>

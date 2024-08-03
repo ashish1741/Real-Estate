@@ -1,10 +1,39 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./profileUpdatePage.scss";
 import {AuthContext} from "../../context/AuthContext"
+import apiRequest from "../../lib/apiRequest";
 
 function ProfileUpdatePage() {
   const {currentUser , updateUser} =  useContext(AuthContext);
+  const [error, setError] = useState("");
+    
 
+   const handleUpate = async (e) => {
+    e.preventDefault();
+
+
+    const formData =  new FormData(e.target);
+    const {username , email , password} =  Object.fromEntries(formData);
+
+    
+
+    try {
+      
+      console.log(`id:${currentUser.userInfo.id}`);
+      
+      const res =  await apiRequest.put(`/users/${currentUser.userInfo.id}`,{username, email, password});
+      console.log(`response is : ${res.data}`);
+      
+      updateUser(res.data);
+
+      
+      
+    } catch (error) {
+      console.log(error);
+      setError( error.response.message);
+    }
+
+   }
 
 
 
@@ -13,7 +42,7 @@ function ProfileUpdatePage() {
   return (
     <div className="profileUpdatePage">
       <div className="formContainer">
-        <form>
+        <form onSubmit={handleUpate}>
           <h1>Update Profile</h1>
           <div className="item">
             <label htmlFor="username">Username</label>
@@ -38,6 +67,7 @@ function ProfileUpdatePage() {
             <input id="password" name="password" type="password"   />
           </div>
           <button>Update</button>
+          {error && <span>{error}</span>}
         </form>
       </div>
       <div className="sideContainer">
