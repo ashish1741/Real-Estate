@@ -8,15 +8,8 @@ import "./profilePage.scss";
 
 function ProfilePage() {
   const navigate = useNavigate();
-  const { updateUser, currentUser } = useContext(AuthContext);
+  const { updateUser, currentUser } = useContext(AuthContext);  
   const { username, avatar, email } = currentUser.userInfo;
-
-
-  
-
-
-  
-     
 
   const handleLogOut = async () => {
     try {
@@ -28,54 +21,53 @@ function ProfilePage() {
     }
   };
   return (
- 
-      <div className="profilePage">
-        <div className="details">
-          <div className="wrapper">
-            <div className="title">
-              <h1>User Information</h1>
-              
-              <button onClick={() => navigate("/profile/update")}>Update Profile</button>
-             
-            </div>
-            <div className="info">
-              <span>
-                Avatar:
-                <img
-                  src={
-                    avatar ||
-                    "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
-                  }
-                  alt=""
-                />
-              </span>
-              <span>
-                Username: <b>{username}</b>
-              </span>
-              <span>
-                E-mail: <b>{email}</b>
-              </span>
-              <button onClick={handleLogOut}>Log Out</button>
-            </div>
-            <div className="title">
-              <h1>My List</h1>
-              <button>Create New Post</button>
-            </div>
-            <List />
-            <div className="title">
-              <h1>Saved List</h1>
-            </div>
-            <List />
+    <div className="profilePage">
+      <div className="details">
+        <div className="wrapper">
+          <div className="title">
+            <h1>User Information</h1>
+
+            <button onClick={() => navigate("/profile/update")}>
+              Update Profile
+            </button>
           </div>
-        </div>
-        <div className="chatContainer">
-          <div className="wrapper">
-            <Chat />
+          <div className="info">
+            <span>
+              Avatar:
+              <img
+                src={
+                  avatar ||
+                  "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+                }
+                alt=""
+              />
+            </span>
+            <span>
+              Username: <b>{username}</b>
+            </span>
+            <span>
+              E-mail: <b>{email}</b>
+            </span>
+            <button onClick={handleLogOut}>Log Out</button>
           </div>
+          <div className="title">
+            <h1>My List</h1>
+            <button>Create New Post</button>
+          </div>
+          <List />
+          <div className="title">
+            <h1>Saved List</h1>
+          </div>
+          <List />
         </div>
       </div>
-    )
-  ;
+      <div className="chatContainer">
+        <div className="wrapper">
+          <Chat />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ProfilePage;
