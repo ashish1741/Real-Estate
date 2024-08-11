@@ -1,43 +1,38 @@
 import { useContext, useState } from "react";
 import "./profileUpdatePage.scss";
-import {AuthContext} from "../../context/AuthContext"
+import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
+import { useNavigate } from "react-router-dom";
+import UploadWidget from "../../components/uploadWidget/UploadWidget";
 
 function ProfileUpdatePage() {
-  const {currentUser , updateUser} =  useContext(AuthContext);
+  const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
-    
+  const [avatar, setAvatar] = useState(currentUser.userInfo.avatar);
+  const navigate = useNavigate();
 
-   const handleUpate = async (e) => {
+  const handleUpate = async (e) => {
     e.preventDefault();
 
-
-    const formData =  new FormData(e.target);
-    const {username , email , password} =  Object.fromEntries(formData);
-
-    
+    const formData = new FormData(e.target);
+    const { username, email, password } = Object.fromEntries(formData);
 
     try {
-      
-      console.log(`id:${currentUser.userInfo.id}`);
-      
-      const res =  await apiRequest.put(`/users/${currentUser.userInfo.id}`,{username, email, password});
-      console.log(`response is : ${res.data}`);
-      
-      updateUser(res.data);
+      const res = await apiRequest.put(`/users/${currentUser.userInfo.id}`, {
+        username,
+        email,
+        password,
+        avatar
+      });
 
-      
-      
+      updateUser(res.data);
+      navigate("/profile");
+      console.log(currentUser.userInfo.username);
     } catch (error) {
       console.log(error);
-      setError( error.response.message);
+      setError(error.response.message);
     }
-
-   }
-
-
-
-
+  };
 
   return (
     <div className="profileUpdatePage">
@@ -64,16 +59,31 @@ function ProfileUpdatePage() {
           </div>
           <div className="item">
             <label htmlFor="password">Password</label>
-            <input id="password" name="password" type="password"   />
+            <input id="password" name="password" type="password" />
           </div>
           <button>Update</button>
           {error && <span>{error}</span>}
         </form>
       </div>
       <div className="sideContainer">
-        <img src={currentUser.userInfo.avatar || 
-          "https://a0.anyrgb.com/pngimg/1698/1348/no-facial-features-no-avatar-no-eyes-expressionless-flat-man-delayering-tak-user-avatar-head-portrait-flat.png"}
-           alt="" className="avatar" />
+        <img
+          src={
+            avatar ||
+            "https://a0.anyrgb.com/pngimg/1698/1348/no-facial-features-no-avatar-no-eyes-expressionless-flat-man-delayering-tak-user-avatar-head-portrait-flat.png"
+          }
+          alt=""
+          className="avatar"
+        />
+        <UploadWidget
+          uwConfig={{
+            cloudName: "dojqcq5eo",
+            uploadPreset: "estate",
+            multiple: false,
+            maxImageFileSize: 2000000,
+            floder: "avatar",
+          }}
+          setAvatar={setAvatar}
+        ></UploadWidget>
       </div>
     </div>
   );

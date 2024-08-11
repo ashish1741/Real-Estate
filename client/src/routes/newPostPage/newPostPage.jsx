@@ -1,12 +1,68 @@
+import { useState } from "react";
 import "./newPostPage.scss";
+import apiRequest from "../../lib/apiRequest";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function NewPostPage() {
+
+  const [value, setvalue] = useState("");
+  const [error, setError] = useState("")
+  const [images, setImages] = useState([])
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData =  new FormData(e.target);
+    const inputs =  Object.fromEntries(formData);
+
+    try {
+      const res =  await apiRequest.post("/api/posts",{
+        postData : {
+          title : inputs.title,
+          price: ParseInt(inputs.price),
+          address: inputs.address,
+          city:inputs.city,
+          bedroom : parseInt(inputs.bedroom),
+          bathroom : parseInt(inputs.bedroom),
+          type:inputs.type,
+          property:inputs.property,
+          latitude: inputs.latitude,
+          longitude: inputs.longitude,
+        },
+        postDetail:{
+          desc :  value,
+          utilities :  inputs.utilities,
+          pet:inputs.pet,
+          income : inputs.income, 
+          size : parseInt(inputs.size),
+          school : parseInt(inputs.school),
+          bus : parseInt(inputs.bus),
+          restaurant : parseInt(inputs.restaurant),
+        }
+      })
+
+      
+      
+    } catch (error) {
+      setError(error)
+      
+    }
+
+
+    
+
+
+
+
+  }
+
   return (
     <div className="newPostPage">
       <div className="formContainer">
         <h1>Add New Post</h1>
         <div className="wrapper">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="item">
               <label htmlFor="title">Title</label>
               <input id="title" name="title" type="text" />
@@ -17,10 +73,11 @@ function NewPostPage() {
             </div>
             <div className="item">
               <label htmlFor="address">Address</label>
-              <input id="address" name="address" type="text" />
+              <input id="address" name="address" type="textArea" />
             </div>
             <div className="item description">
               <label htmlFor="desc">Description</label>
+              <ReactQuill theme="snow" onChange={setvalue} value={value} />
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
@@ -101,6 +158,7 @@ function NewPostPage() {
               <input min={0} id="restaurant" name="restaurant" type="number" />
             </div>
             <button className="sendButton">Add</button>
+            {error && <span>{error}</span>}
           </form>
         </div>
       </div>
