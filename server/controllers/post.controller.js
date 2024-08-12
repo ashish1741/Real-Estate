@@ -21,7 +21,7 @@ export const getPost = async (req, res) => {
     const post = await prisma.post.findUnique({
       where: { id },
       include:{
-        postDetail : true,
+        postDetails : true,
         user: {
           select:{
             username : true,
@@ -52,7 +52,7 @@ export const createPost = async (req, res) => {
       data: {
         ...body.postData,  // Spreading the postData fields into the create data
         userId: tokenUserId,
-        postDetail: {
+        postDetails: {
           create: body.postDetail,  // Creating related postDetail
         },
       },

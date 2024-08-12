@@ -3,59 +3,57 @@ import "./newPostPage.scss";
 import apiRequest from "../../lib/apiRequest";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import UploadWidget from "../../components/uploadWidget/UploadWidget";
+import {useNavigate} from "react-router-dom"
 
 function NewPostPage() {
-
   const [value, setvalue] = useState("");
-  const [error, setError] = useState("")
-  const [images, setImages] = useState([])
+  const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
 
+
+  const navigate =  useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData =  new FormData(e.target);
-    const inputs =  Object.fromEntries(formData);
+    const formData = new FormData(e.target);
+    const inputs = Object.fromEntries(formData);
 
     try {
-      const res =  await apiRequest.post("/api/posts",{
-        postData : {
-          title : inputs.title,
-          price: ParseInt(inputs.price),
+      const res = await apiRequest.post("/posts", {
+        postData: {
+          title: inputs.title,
+          price: parseInt(inputs.price),
           address: inputs.address,
-          city:inputs.city,
-          bedroom : parseInt(inputs.bedroom),
-          bathroom : parseInt(inputs.bedroom),
-          type:inputs.type,
-          property:inputs.property,
+          city: inputs.city,
+          bedroom: parseInt(inputs.bedroom),
+          bathroom: parseInt(inputs.bedroom),
+          type: inputs.type,
+          property: inputs.property,
           latitude: inputs.latitude,
           longitude: inputs.longitude,
+          images: images,
         },
-        postDetail:{
-          desc :  value,
-          utilities :  inputs.utilities,
-          pet:inputs.pet,
-          income : inputs.income, 
-          size : parseInt(inputs.size),
-          school : parseInt(inputs.school),
-          bus : parseInt(inputs.bus),
-          restaurant : parseInt(inputs.restaurant),
-        }
-      })
-
+        postDetail: {
+          desc: value,
+          utilities: inputs.utilities,
+          pet: inputs.pet,
+          income: inputs.income,
+          size: parseInt(inputs.size),
+          school: parseInt(inputs.school),
+          bus: parseInt(inputs.bus),
+          restaurant: parseInt(inputs.restaurant),
+        },
+      });
       
+      console.log(images);
+      
+      navigate("/" + res.data.newPost.id)
       
     } catch (error) {
-      setError(error)
-      
+      setError(error);
     }
-
-
-    
-
-
-
-
-  }
+  };
 
   return (
     <div className="newPostPage">
@@ -158,11 +156,24 @@ function NewPostPage() {
               <input min={0} id="restaurant" name="restaurant" type="number" />
             </div>
             <button className="sendButton">Add</button>
-            {error && <span>{error}</span>}
+            {error && <span>{error.message}</span>}
           </form>
         </div>
       </div>
-      <div className="sideContainer"></div>
+      <div className="sideContainer">
+        {images.map((currentElement , index) => {
+          return <img src= {currentElement} key={index} alt="" />
+        })}
+        <UploadWidget
+          uwConfig={{
+            multiple: true,
+            cloudName: "dojqcq5eo",
+            uploadPreset: "estate",
+            floder: "posts",
+          }}
+          setState={setImages}
+        />
+      </div>
     </div>
   );
 }

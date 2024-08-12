@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,27 +13,27 @@ model User {
   username  String   @unique
   password  String
   avatar    String?
-  post      Post[]
+  posts     Post[]  
   createdAt DateTime @default(now())
 }
 
 model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  price     Int
-  images    String[]
-  address   String
-  city      String
-  bedroom   Int
-  bathroom  Int
-  latitude  String
-  longitude String
-  type      Type
-  property  Property
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @db.ObjectId
-  postDetail PostDetail[]
-  createdAt DateTime @default(now())
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  price       Int
+  images      String[]
+  address     String
+  city        String
+  bedroom     Int
+  bathroom    Int
+  latitude    String
+  longitude   String
+  type        Type
+  property    Property
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @db.ObjectId
+  postDetails PostDetail[]
+  createdAt   DateTime     @default(now())
 }
 
 enum Type {
@@ -49,19 +48,16 @@ enum Property {
   land
 }
 
-
 model PostDetail {
-  id  String   @id @default(auto()) @map("_id") @db.ObjectId
-  desc String
-  utilities String?
-  pet String?
-  income String?
-  size String?
-  school String?
-  bus Int?
-  restaurant Int?
-  post Post @relation(fields:[postId] ,references : [id])
-  postId String @db.ObjectId @unique
-
-
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  desc        String
+  utilities   String?
+  pet         String?
+  income      String?
+  size        Int?
+  school      Int?
+  bus         Int?
+  restaurant  Int?
+  post        Post     @relation(fields: [postId], references: [id])
+  postId      String   @db.ObjectId @unique
 }

@@ -8,7 +8,7 @@ import UploadWidget from "../../components/uploadWidget/UploadWidget";
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
   const [error, setError] = useState("");
-  const [avatar, setAvatar] = useState(currentUser.userInfo.avatar);
+  const [avatar, setAvatar] = useState([""]);
   const navigate = useNavigate();
 
   const handleUpate = async (e) => {
@@ -22,7 +22,7 @@ function ProfileUpdatePage() {
         username,
         email,
         password,
-        avatar
+        avatar:avatar[0]
       });
 
       updateUser(res.data);
@@ -68,7 +68,7 @@ function ProfileUpdatePage() {
       <div className="sideContainer">
         <img
           src={
-            avatar ||
+            avatar[0] || currentUser.avatar ||
             "https://a0.anyrgb.com/pngimg/1698/1348/no-facial-features-no-avatar-no-eyes-expressionless-flat-man-delayering-tak-user-avatar-head-portrait-flat.png"
           }
           alt=""
@@ -82,7 +82,7 @@ function ProfileUpdatePage() {
             maxImageFileSize: 2000000,
             floder: "avatar",
           }}
-          setAvatar={setAvatar}
+          stateState={setAvatar}
         ></UploadWidget>
       </div>
     </div>
