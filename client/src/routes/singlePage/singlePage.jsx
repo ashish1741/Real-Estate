@@ -1,13 +1,24 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
-import { userData } from "../../lib/dummydata";
 import { useLoaderData } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 function SinglePage() {
-  const post  = useLoaderData();
-  console.log(post);
+  const { post } = useLoaderData();
+  const [postDetails] = post?.postDetails;
+
   
+
+  
+
+  const formatDistance = (distance) => {
+    if (!distance) return "Not specified";
+    return distance >= 1000
+      ? `${(distance / 1000).toFixed(1)} km away`
+      : `${distance} m away`;
+  };
+
   return (
     <div className="singlePage">
       <div className="details">
@@ -18,17 +29,25 @@ function SinglePage() {
               <div className="post">
                 <h1>{post.title}</h1>
                 <div className="address">
-                  <img src="/pin.png" alt="" />
-                  <span>{post.address}</span>
+                  <img src="/pin.png" alt="Location pin" />
+                  <span>{post.address}, {post.city}</span>
                 </div>
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
-                <img src={post.user.avatar} alt="" />
-                <span>{post.user.username}</span>
+                <img
+                  src={post.user?.avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68D1zB62HiAWZAkQpessCgGpmfvJQUX8Rhg&s"}
+                  alt={post.user?.username || "User Avatar"}
+                />
+                <span>{post.user?.username || "Anonymous"}</span>
               </div>
             </div>
-            <div className="bottom">{post.postDetails.desc}</div>
+            <div
+              className="bottom"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetails.desc) }}
+            >
+         
+            </div>
           </div>
         </div>
       </div>
@@ -36,66 +55,48 @@ function SinglePage() {
         <div className="wrapper">
           <p className="title">General</p>
           <div className="listVertical">
-            <div className="feature">
-              <img src="/utility.png" alt="" />
-              <div className="featureText">
-                <span>Utilities</span>
-                <p>Renter is responsible</p>
+            {[
+              { img: "/utility.png", label: "Utilities", value: postDetails.utilities },
+              { img: "/pet.png", label: "Pet Policy", value: postDetails.pet },
+              { img: "/fee.png", label: "Property Fees", value: postDetails.income }
+            ].map((feature, index) => (
+              <div className="feature" key={index}>
+                <img src={feature.img} alt={feature.label} />
+                <div className="featureText">
+                  <span>{feature.label}</span>
+                  <p>{feature.value || "Not specified"}</p>
+                </div>
               </div>
-            </div>
-            <div className="feature">
-              <img src="/pet.png" alt="" />
-              <div className="featureText">
-                <span>Pet Policy</span>
-                <p>Pets Allowed</p>
-              </div>
-            </div>
-            <div className="feature">
-              <img src="/fee.png" alt="" />
-              <div className="featureText">
-                <span>Property Fees</span>
-                <p>Must have 3x the rent in total household income</p>
-              </div>
-            </div>
+            ))}
           </div>
           <p className="title">Sizes</p>
           <div className="sizes">
-            <div className="size">
-              <img src="/size.png" alt="" />
-              <span>80 sqft</span>
-            </div>
-            <div className="size">
-              <img src="/bed.png" alt="" />
-              <span>2 beds</span>
-            </div>
-            <div className="size">
-              <img src="/bath.png" alt="" />
-              <span>1 bathroom</span>
-            </div>
+            {[
+              { img: "/size.png", label: "Size", value: `${postDetails.size || "Not specified"} sqft` },
+              { img: "/bed.png", label: "Beds", value: `${post.bedroom} beds` },
+              { img: "/bath.png", label: "Bathrooms", value: `${post.bathroom} bathrooms` }
+            ].map((size, index) => (
+              <div className="size" key={index}>
+                <img src={size.img} alt={size.label} />
+                <span>{size.value}</span>
+              </div>
+            ))}
           </div>
           <p className="title">Nearby Places</p>
           <div className="listHorizontal">
-            <div className="feature">
-              <img src="/school.png" alt="" />
-              <div className="featureText">
-                <span>School</span>
-                <p>250m away</p>
+            {[
+              { img: "/school.png", label: "School", distance: postDetails.school },
+              { img: "/bus.png", label: "Bus Stop", distance: postDetails.bus },
+              { img: "/restaurant.png", label: "Restaurant", distance: postDetails.restaurant }
+            ].map((place, index) => (
+              <div className="feature" key={index}>
+                <img src={place.img} alt={place.label} />
+                <div className="featureText">
+                  <span>{place.label}</span>
+                  <p>{formatDistance(place.distance)}</p>
+                </div>
               </div>
-            </div>
-            <div className="feature">
-              <img src="/pet.png" alt="" />
-              <div className="featureText">
-                <span>Bus Stop</span>
-                <p>100m away</p>
-              </div>
-            </div>
-            <div className="feature">
-              <img src="/fee.png" alt="" />
-              <div className="featureText">
-                <span>Restaurant</span>
-                <p>200m away</p>
-              </div>
-            </div>
+            ))}
           </div>
           <p className="title">Location</p>
           <div className="mapContainer">
@@ -103,11 +104,11 @@ function SinglePage() {
           </div>
           <div className="buttons">
             <button>
-              <img src="/chat.png" alt="" />
+              <img src="/chat.png" alt="Chat" />
               Send a Message
             </button>
             <button>
-              <img src="/save.png" alt="" />
+              <img src="/save.png" alt="Save" />
               Save the Place
             </button>
           </div>

@@ -46,8 +46,6 @@ function NewPostPage() {
         },
       });
       
-      console.log(images);
-      
       navigate("/" + res.data.newPost.id)
       
     } catch (error) {
