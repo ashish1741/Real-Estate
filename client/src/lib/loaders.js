@@ -16,3 +16,22 @@ export const singlePageLoader = async ({ params }) => {
     throw error;
   }
 };
+
+
+export const listPageLoader =  async ({request , params}) => {
+
+const query =  request.url.split("?")[1];
+const res =  await apiRequest("/post?" +  query)
+return res.data;
+  
+
+
+
+
+
+
+
+
+
+
+}
