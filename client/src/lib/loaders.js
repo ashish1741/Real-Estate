@@ -1,3 +1,4 @@
+import { defer } from "react-router-dom";
 import apiRequest from "./apiRequest";
 
 export const singlePageLoader = async ({ params }) => {
@@ -17,21 +18,17 @@ export const singlePageLoader = async ({ params }) => {
   }
 };
 
+export const listPageLoader = async ({ request }) => {
+  const query = request.url.split("?")[1] || "";
+  const apiEndpoint = query ? `/posts?${query}` : "/posts";
 
-export const listPageLoader =  async ({request , params}) => {
-
-const query =  request.url.split("?")[1];
-const res =  await apiRequest("/post?" +  query)
-return res.data;
-  
-
-
-
-
-
-
-
-
-
-
-}
+  try {
+    const postPromise = apiRequest(apiEndpoint);
+    return defer({
+      postResponse: postPromise,
+    });
+  } catch (error) {
+    console.error("Failed to load list page data:", error);
+    throw error;
+  }
+};
