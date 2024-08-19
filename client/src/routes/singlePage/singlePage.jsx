@@ -8,10 +8,6 @@ function SinglePage() {
   const { post } = useLoaderData();
   const [postDetails] = post?.postDetails;
 
-  
-
-  
-
   const formatDistance = (distance) => {
     if (!distance) return "Not specified";
     return distance >= 1000
@@ -30,13 +26,18 @@ function SinglePage() {
                 <h1>{post.title}</h1>
                 <div className="address">
                   <img src="/pin.png" alt="Location pin" />
-                  <span>{post.address}, {post.city}</span>
+                  <span>
+                    {post.address}, {post.city}
+                  </span>
                 </div>
                 <div className="price">$ {post.price}</div>
               </div>
               <div className="user">
                 <img
-                  src={post.user?.avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68D1zB62HiAWZAkQpessCgGpmfvJQUX8Rhg&s"}
+                  src={
+                    post.user?.avatar ||
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68D1zB62HiAWZAkQpessCgGpmfvJQUX8Rhg&s"
+                  }
                   alt={post.user?.username || "User Avatar"}
                 />
                 <span>{post.user?.username || "Anonymous"}</span>
@@ -44,10 +45,10 @@ function SinglePage() {
             </div>
             <div
               className="bottom"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetails.desc) }}
-            >
-         
-            </div>
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(postDetails.desc),
+              }}
+            ></div>
           </div>
         </div>
       </div>
@@ -56,9 +57,17 @@ function SinglePage() {
           <p className="title">General</p>
           <div className="listVertical">
             {[
-              { img: "/utility.png", label: "Utilities", value: postDetails.utilities },
+              {
+                img: "/utility.png",
+                label: "Utilities",
+                value: postDetails.utilities,
+              },
               { img: "/pet.png", label: "Pet Policy", value: postDetails.pet },
-              { img: "/fee.png", label: "Property Fees", value: postDetails.income }
+              {
+                img: "/fee.png",
+                label: "Property Fees",
+                value: postDetails.income,
+              },
             ].map((feature, index) => (
               <div className="feature" key={index}>
                 <img src={feature.img} alt={feature.label} />
@@ -72,9 +81,17 @@ function SinglePage() {
           <p className="title">Sizes</p>
           <div className="sizes">
             {[
-              { img: "/size.png", label: "Size", value: `${postDetails.size || "Not specified"} sqft` },
+              {
+                img: "/size.png",
+                label: "Size",
+                value: `${postDetails.size || "Not specified"} sqft`,
+              },
               { img: "/bed.png", label: "Beds", value: `${post.bedroom} beds` },
-              { img: "/bath.png", label: "Bathrooms", value: `${post.bathroom} bathrooms` }
+              {
+                img: "/bath.png",
+                label: "Bathrooms",
+                value: `${post.bathroom} bathrooms`,
+              },
             ].map((size, index) => (
               <div className="size" key={index}>
                 <img src={size.img} alt={size.label} />
@@ -85,9 +102,17 @@ function SinglePage() {
           <p className="title">Nearby Places</p>
           <div className="listHorizontal">
             {[
-              { img: "/school.png", label: "School", distance: postDetails.school },
+              {
+                img: "/school.png",
+                label: "School",
+                distance: postDetails.school,
+              },
               { img: "/bus.png", label: "Bus Stop", distance: postDetails.bus },
-              { img: "/restaurant.png", label: "Restaurant", distance: postDetails.restaurant }
+              {
+                img: "/restaurant.png",
+                label: "Restaurant",
+                distance: postDetails.restaurant,
+              },
             ].map((place, index) => (
               <div className="feature" key={index}>
                 <img src={place.img} alt={place.label} />

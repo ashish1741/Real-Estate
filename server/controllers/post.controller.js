@@ -1,27 +1,30 @@
 import prisma from "../lib/prisma.js";
 
 export const getPosts = async (req, res) => {
-  const query =  req.query;
-
+  const { city, type, property, bedroom, minPrice, maxPrice } = req.query;
+  console.log(property);
 
   try {
     const posts = await prisma.post.findMany({
-      where:{
-        city:query.city || undefined,
-        type:query.type || undefined,
-        property:query.property || undefined,
-        bedroom:parseInt(bedroom) || undefined,
-        price:{
-          gte: parseInt(query.minPrice) || 0,
-          lte:parseInt(query.maxPrice) || 100000
-        }
-      }
+      where: {
+        city: city || undefined,
+        type: type || undefined,
+        property: property ? parseInt(property) : undefined, 
+        bedroom: bedroom ? parseInt(bedroom) : undefined,
+        price: {
+          gte: minPrice ? parseInt(minPrice) : 0,
+          lte: maxPrice ? parseInt(maxPrice) : 100000,
+        },
+      },
     });
+    
+    console.log(posts);
 
     res.status(200).json({
       posts,
     });
   } catch (error) {
+    console.error("Error fetching posts:", error);
     res.status(500).json({
       message: "Failed to get posts",
     });
@@ -31,10 +34,9 @@ export const getPosts = async (req, res) => {
 export const getPost = async (req, res) => {
   const id = req.params.id;
 
-  
   try {
     const post = await prisma.post.findUnique({
-      where: { id :  id },
+      where: { id: id },
       include: {
         postDetails: true,
         user: {
@@ -47,7 +49,7 @@ export const getPost = async (req, res) => {
     });
 
     console.log(post);
-    
+
     res.status(200).json({
       post,
     });
@@ -67,10 +69,10 @@ export const createPost = async (req, res) => {
   try {
     const newPost = await prisma.post.create({
       data: {
-        ...body.postData, 
+        ...body.postData,
         userId: tokenUserId,
         postDetails: {
-          create: body.postDetail, 
+          create: body.postDetail,
         },
       },
     });
