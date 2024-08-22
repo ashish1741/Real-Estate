@@ -10,7 +10,7 @@ function Filter() {
     city: searchParams.get("city") || "",
     minPrice: searchParams.get("minPrice") || 0,
     maxPrice: searchParams.get("maxPrice") || 0,
-    property: searchParams.get("property") || "apartment",
+    property: searchParams.get("property") || "",
     bedroom: searchParams.get("bedroom") || 1,
   });
 
@@ -23,9 +23,13 @@ function Filter() {
 
   const handleFilter = () => {
     const filteredQuery = Object.fromEntries(
-      Object.entries(query).filter(([key, value]) => value !== "" && value !== 0)
+      Object.entries(query).filter(
+        ([key, value]) => value !== "" && value !== 0
+      )
     );
     setSearchParams(filteredQuery);
+    console.log(query);
+    
   };
 
   return (
@@ -68,6 +72,7 @@ function Filter() {
             defaultValue={query.property}
             onChange={handleChange}
           >
+            <option value="">any</option>
             <option value="apartment">Apartment</option>
             <option value="house">House</option>
             <option value="condo">Condo</option>

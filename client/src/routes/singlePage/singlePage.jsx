@@ -1,11 +1,19 @@
 import "./singlePage.scss";
 import Slider from "../../components/slider/Slider";
 import Map from "../../components/map/Map";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext, useState } from "react";
+import apiRequest from "../../lib/apiRequest";
 
 function SinglePage() {
-  const { post } = useLoaderData();
+  const post = useLoaderData();
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [Saved, setSaved] = useState(post.isSaved);
+  
+
   const [postDetails] = post?.postDetails;
 
   const formatDistance = (distance) => {
@@ -13,6 +21,24 @@ function SinglePage() {
     return distance >= 1000
       ? `${(distance / 1000).toFixed(1)} km away`
       : `${distance} m away`;
+  };
+
+  const handleSave = async () => {
+
+    if (!currentUser) {
+      navigate("/login");
+    }
+
+    try {
+      await apiRequest.post("/users/save", { postId: post.id });
+      setSaved(prev => !prev)
+
+    } catch (error) {
+
+      setSaved(prev => !prev)
+      console.log(error);
+      
+    }
   };
 
   return (
@@ -132,9 +158,10 @@ function SinglePage() {
               <img src="/chat.png" alt="Chat" />
               Send a Message
             </button>
-            <button>
+            <button onClick={handleSave} style={{backgroundColor: Saved ? "yellow" : "white"}}>
               <img src="/save.png" alt="Save" />
-              Save the Place
+              
+              {Saved ? "placed Saved"  : "Save the Place"}
             </button>
           </div>
         </div>
