@@ -32,3 +32,12 @@ export const listPageLoader = async ({ request }) => {
     throw error;
   }
 };
+
+
+export const profilePageLoader = async() => {
+
+  const profilePost =  apiRequest("/users/profilePosts")
+  return defer({
+    postResponse: profilePost,
+  });
+} 
