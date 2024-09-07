@@ -140,41 +140,32 @@ export const savePost = async (req, res) => {
 
 export const getProfilePost = async (req, res) => {
   const tokenUserId = req.params.userId;
-  
+  console.log("Received userId:", tokenUserId);
 
   try {
-    // Fetch all posts created by the user
     const userPosts = await prisma.post.findMany({
       where: { userId: tokenUserId },
     });
+    console.log("User posts:", userPosts);
 
-    console.log(userPosts);
-    
-
-    // Fetch all posts saved by the user
     const saved = await prisma.savedPost.findMany({
       where: { userId: tokenUserId },
-      include: {
-        post: true, 
-      },
+      include: { post: true },
     });
+    console.log("Saved posts:", saved);
 
-    console.log(saved);
-
-
-    
     const savedPost = saved.map((item) => item.post);
-    console.log(savePost);
-    
+    console.log("Mapped saved posts:", savedPost);  // Fixed log
 
     return res.status(200).json({
       userPosts,
-      savedPost,
+      savedPost, // Fixed response variable name
     });
   } catch (error) {
-    console.error("Error in getProfilePost:", error);
+    console.error("Error fetching user posts:", error); // Log the error
+
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Failed to get user posts or saved posts",
     });
   }
 };
