@@ -8,6 +8,8 @@ import "./profilePage.scss";
 
 function ProfilePage() {
   const data = useLoaderData();
+  console.log(data.postResponse);
+
   const navigate = useNavigate();
   const { updateUser, currentUser } = useContext(AuthContext);
   const { username, avatar, email } = currentUser.userInfo;
@@ -59,9 +61,12 @@ function ProfilePage() {
           <Suspense fallback={<p>Loading data ........</p>}>
             <Await
               resolve={data.postResponse}
-              errorElement={<p>Error loading package location!</p>}
+              errorElement={<p>Error loading data!</p>}
             >
-              {(postResponse) => <List posts={postResponse.data.userPosts} />}
+              {(postResponse) => {
+                const userPosts = postResponse?.data?.userPosts || [];
+                return <List posts={userPosts} />;
+              }}
             </Await>
           </Suspense>
 

@@ -36,7 +36,7 @@ export const listPageLoader = async ({ request }) => {
 
 export const profilePageLoader = async() => {
 
-  const profilePost =  apiRequest("/users/profilePosts")
+  const profilePost =   apiRequest("/users/profilePosts")
   return defer({
     postResponse: profilePost,
   });
